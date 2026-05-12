@@ -1,16 +1,287 @@
-<!doctype html>
-<html lang="en" class="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OpenForensics-AI Dashboard</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body class="bg-gray-950 text-gray-100 font-mono">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenForensics-AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind Config for custom colors/dark mode -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            cyan: { 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 800: '#155e75', 900: '#164e63', 950: '#083344' },
+            emerald: { 400: '#34d399', 500: '#10b981', 950: '#022c22' },
+            red: { 400: '#f87171', 500: '#ef4444', 950: '#450a0a' },
+            gray: { 800: '#1f2937', 900: '#111827', 950: '#030712' }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans selection:bg-cyan-900 selection:text-cyan-50 flex h-screen overflow-hidden">
+  
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-950 border-r border-gray-800 flex flex-col hidden md:flex">
+    <div class="h-16 flex items-center px-6 border-b border-gray-800">
+      <i data-lucide="shield" class="w-6 h-6 text-cyan-500 mr-3"></i>
+      <span class="font-bold text-lg tracking-wide">OpenForensics-AI</span>
+    </div>
+    <nav class="flex-1 py-6 px-4 space-y-2 overflow-y-auto">
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors bg-cyan-900/20 text-cyan-400 border border-cyan-800/30">
+        <i data-lucide="activity" class="w-5 h-5"></i>
+        <span class="font-medium text-sm">Dashboard Overview</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors text-gray-400 hover:bg-gray-800/50 hover:text-gray-200">
+        <i data-lucide="file-search" class="w-5 h-5"></i>
+        <span class="font-medium text-sm">Identification</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors text-gray-400 hover:bg-gray-800/50 hover:text-gray-200">
+        <i data-lucide="cpu" class="w-5 h-5"></i>
+        <span class="font-medium text-sm">RAM Forensics</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors text-gray-400 hover:bg-gray-800/50 hover:text-gray-200">
+        <i data-lucide="shield" class="w-5 h-5"></i>
+        <span class="font-medium text-sm">Malware Analysis</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors text-gray-400 hover:bg-gray-800/50 hover:text-gray-200">
+        <i data-lucide="key" class="w-5 h-5"></i>
+        <span class="font-medium text-sm">Decryptor Lookup</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-lg transition-colors text-gray-400 hover:bg-gray-800/50 hover:text-gray-200">
+        <i data-lucide="file-text" class="w-5 h-5"></i>
+        <span class="font-medium text-sm">Reports</span>
+      </a>
+    </nav>
+    <div class="p-4 border-t border-gray-800 flex items-center justify-between text-xs text-gray-500">
+      <span>v1.0.0-rc</span>
+      <span class="flex items-center space-x-1">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>API Connected</span>
+      </span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Header -->
+    <header class="h-16 bg-gray-950 border-b border-gray-800 flex items-center justify-between px-6">
+      <button class="md:hidden text-gray-400 hover:text-white">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+      <div class="flex items-center space-x-6 ml-auto">
+        <div class="flex items-center space-x-2 border-r border-gray-800 pr-6">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-cyan-500"></span>
+          </span>
+          <span class="text-sm font-medium text-gray-300">Agents Idle</span>
+        </div>
+        <button class="relative text-gray-400 hover:text-gray-100 transition-colors">
+          <i data-lucide="bell" class="w-5 h-5"></i>
+          <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-gray-950"></span>
+        </button>
+        <div class="h-8 w-8 rounded bg-gray-800 border border-gray-700 flex items-center justify-center">
+          <span class="text-xs font-bold text-cyan-500">OP</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Area -->
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-[#0a0a0f] p-6 lg:p-8">
+      <div class="max-w-7xl mx-auto space-y-8">
+        
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold text-gray-100 tracking-tight">Dashboard Overview</h1>
+            <p class="text-sm text-gray-400 mt-1">Real-time telemetry and forensics pipeline status.</p>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button class="px-4 py-2 bg-gray-900 hover:bg-gray-800 border border-gray-700 rounded-lg text-sm font-medium text-gray-200 transition-colors flex items-center space-x-2">
+              <span>Export Markdown</span>
+              <i data-lucide="download" class="w-4 h-4"></i>
+            </button>
+            <button class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-sm font-medium transition-colors shadow-lg shadow-cyan-900/20 flex items-center space-x-2">
+              <span>Export PDF</span>
+              <i data-lucide="download" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl flex items-center space-x-4">
+            <div class="p-3 bg-gray-950 rounded-lg border border-gray-800 shadow-inner">
+              <i data-lucide="activity" class="text-cyan-500"></i>
+            </div>
+            <div>
+              <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Analyses Run</p>
+              <p class="text-2xl font-bold text-gray-100 mt-0.5">1,204</p>
+            </div>
+          </div>
+          <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl flex items-center space-x-4">
+            <div class="p-3 bg-gray-950 rounded-lg border border-gray-800 shadow-inner">
+              <i data-lucide="shield-alert" class="text-red-500"></i>
+            </div>
+            <div>
+              <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Threats Detected</p>
+              <p class="text-2xl font-bold text-gray-100 mt-0.5">87</p>
+            </div>
+          </div>
+          <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl flex items-center space-x-4">
+            <div class="p-3 bg-gray-950 rounded-lg border border-gray-800 shadow-inner">
+              <i data-lucide="database" class="text-emerald-500"></i>
+            </div>
+            <div>
+              <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Keys Extracted</p>
+              <p class="text-2xl font-bold text-gray-100 mt-0.5">14</p>
+            </div>
+          </div>
+          <div class="bg-gray-900 border border-gray-800 p-5 rounded-xl flex items-center space-x-4">
+            <div class="p-3 bg-gray-950 rounded-lg border border-gray-800 shadow-inner">
+              <i data-lucide="file-search" class="text-purple-500"></i>
+            </div>
+            <div>
+              <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Active Agents</p>
+              <p class="text-2xl font-bold text-gray-100 mt-0.5">5 / 5</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Left Column - Inputs & Logs -->
+          <div class="lg:col-span-5 space-y-6">
+            
+            <!-- Upload Card -->
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-sm group">
+              <h3 class="text-lg font-semibold text-gray-100 mb-1">Artifact Analysis</h3>
+              <p class="text-sm text-gray-400 mb-5">Submit suspicious binaries, RAM dumps, or ransom notes to the AI pipeline.</p>
+              
+              <div class="border-2 border-dashed border-gray-700 hover:border-cyan-500 hover:bg-cyan-950/20 bg-gray-950/50 rounded-xl p-8 flex flex-col items-center justify-center transition-all cursor-pointer">
+                <i data-lucide="upload-cloud" class="w-10 h-10 mb-4 text-gray-500 group-hover:text-cyan-500 transition-colors"></i>
+                <p class="text-sm text-gray-300 text-center mb-1">
+                  <span class="font-semibold text-cyan-400 hover:text-cyan-300">Click to upload</span> or drag and drop
+                </p>
+                <p class="text-xs text-gray-500 mt-2 font-mono bg-gray-900 px-2 py-1 rounded">
+                  Formats: .exe,.dll,.bin,.raw,.txt,.lock
+                </p>
+              </div>
+            </div>
+            
+            <!-- Live Logs -->
+            <div class="bg-gray-900 border border-gray-800 rounded-xl p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider flex items-center space-x-2">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span>Live Agent Stream</span>
+                </h3>
+              </div>
+              <div class="bg-gray-950 rounded-lg border border-gray-800 p-4 font-mono text-xs text-gray-400 h-64 overflow-y-auto space-y-2">
+                <p><span class="text-cyan-600">[21:40:02]</span> SYSTEM: Pipeline initialized.</p>
+                <p><span class="text-emerald-500">[21:40:05]</span> MemoryAgent: Parsing dump headers...</p>
+                <p><span class="text-red-400">[21:40:12]</span> MalwareAgent: Suspicious entropy detected in .text section</p>
+                <p><span class="text-emerald-500">[21:40:15]</span> MemoryAgent: Extracted 2 potential AES keys.</p>
+                <p><span class="text-purple-500">[21:40:16]</span> DecryptorAgent: Querying NoMoreRansom API...</p>
+                <p class="animate-pulse text-cyan-600">_</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column - Results -->
+          <div class="lg:col-span-7 space-y-6">
+            <h2 class="text-lg font-semibold text-gray-100 mb-2">Recent Findings</h2>
+            
+            <!-- Results Card 1 -->
+            <div class="border border-red-500/20 rounded-xl p-6 shadow-sm bg-red-950/10">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-base font-semibold text-gray-100 flex items-center space-x-2">
+                  <i data-lucide="shield-alert" class="w-5 h-5 text-red-500"></i>
+                  <span>Malware Analysis: sample_091A.exe</span>
+                </h3>
+                <div class="flex items-center space-x-2">
+                  <span class="text-xs text-gray-400">Confidence</span>
+                  <span class="text-sm font-mono text-cyan-400 bg-cyan-950/30 px-2 py-0.5 rounded border border-cyan-900/50">98.5%</span>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between py-2 border-b border-gray-800/50">
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Family</span>
+                  <span class="text-sm font-mono text-red-400 font-bold mt-1 sm:mt-0">LockBit 3.0</span>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between py-2 border-b border-gray-800/50">
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Crypto Algorithms</span>
+                  <div class="flex flex-wrap gap-1.5 justify-end mt-1 sm:mt-0">
+                    <span class="px-2 py-0.5 bg-gray-950 border border-gray-800 rounded text-gray-300 text-xs font-mono">AES-256-CBC</span>
+                    <span class="px-2 py-0.5 bg-gray-950 border border-gray-800 rounded text-gray-300 text-xs font-mono">RSA-2048</span>
+                  </div>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between py-2 border-b border-gray-800/50">
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">YARA Rules</span>
+                  <div class="flex flex-wrap gap-1.5 justify-end mt-1 sm:mt-0">
+                    <span class="px-2 py-0.5 bg-gray-950 border border-gray-800 rounded text-gray-300 text-xs font-mono">apt_lockbit_v3</span>
+                    <span class="px-2 py-0.5 bg-gray-950 border border-gray-800 rounded text-gray-300 text-xs font-mono">crypto_constants_x86</span>
+                  </div>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between py-2">
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Status</span>
+                  <span class="text-sm text-gray-200 mt-1 sm:mt-0 font-mono">High Severity</span>
+                </div>
+              </div>
+
+              <div class="mt-5 pt-4 border-t border-gray-800 flex items-center justify-between">
+                <span class="text-sm text-gray-400">Official Decryptor Found</span>
+                <a href="#" class="flex items-center space-x-1 text-sm text-emerald-400 hover:text-emerald-300 transition-colors">
+                  <span>NoMoreRansom</span>
+                  <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+            </div>
+
+            <!-- Results Card 2 -->
+            <div class="border border-cyan-500/20 rounded-xl p-6 shadow-sm bg-cyan-950/10">
+              <div class="flex items-center justify-between mb-5">
+                <h3 class="text-base font-semibold text-gray-100 flex items-center space-x-2">
+                  <i data-lucide="info" class="w-5 h-5 text-cyan-500"></i>
+                  <span>RAM Forensics: LAPTOP-WIN10.raw</span>
+                </h3>
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between py-2 border-b border-gray-800/50">
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Suspicious Processes</span>
+                  <div class="flex flex-wrap gap-1.5 justify-end mt-1 sm:mt-0">
+                    <span class="px-2 py-0.5 bg-gray-950 border border-gray-800 rounded text-gray-300 text-xs font-mono">svchost.exe (PID: 1402)</span>
+                    <span class="px-2 py-0.5 bg-gray-950 border border-gray-800 rounded text-gray-300 text-xs font-mono">explorer.exe (PID: 3991)</span>
+                  </div>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between py-2 border-b border-gray-800/50">
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Extracted Keys</span>
+                  <div class="flex flex-wrap gap-1.5 justify-end mt-1 sm:mt-0">
+                    <span class="px-2 py-0.5 bg-gray-950 border border-gray-800 rounded text-gray-300 text-xs font-mono">0x3a2b1c4d...</span>
+                    <span class="px-2 py-0.5 bg-gray-950 border border-gray-800 rounded text-gray-300 text-xs font-mono">0xff2a8b9c...</span>
+                  </div>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between py-2">
+                  <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Anomalies</span>
+                  <span class="text-sm text-gray-200 mt-1 sm:mt-0 font-mono">Injected thread detected in svchost.exe</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
 </html>
